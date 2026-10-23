@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a gameplay, rendering, or accessibility problem.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve Silk Road Seasons.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start a new campaign
+        2. Choose two policies
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 141, Firefox 143, Safari 26...
+    validations:
+      required: true
+  - type: dropdown
+    id: viewport
+    attributes:
+      label: Device type
+      options:
+        - Desktop
+        - Tablet
+        - Mobile
+        - Multiple devices
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or console errors
+      description: Drag in images or paste relevant browser console output.

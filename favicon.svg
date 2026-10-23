@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="8" fill="#182720"/>
+  <circle cx="32" cy="28" r="17" fill="#a94735"/>
+  <path d="M8 53c10-9 21-10 31-4 8 5 14 4 20 0v15H8Z" fill="#30473a"/>
+  <rect x="17" y="17" width="30" height="30" rx="2" fill="none" stroke="#f2e3c7" stroke-width="1.2" opacity=".5"/>
+  <text x="32" y="40" text-anchor="middle" font-family="KaiTi, serif" font-size="24" fill="#f5e7cf">策</text>
+</svg>

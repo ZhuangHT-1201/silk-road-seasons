@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17251f">
+  <meta name="description" content="Silk Road Seasons: A Dunhuang Chronicle — a historical strategy game set in Tang-era Dunhuang.">
+  <title>Silk Road Seasons · 敦煌 · 四时策</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="paper-noise" aria-hidden="true"></div>
+
+  <section class="title-screen" id="titleScreen" aria-labelledby="gameTitle">
+    <div class="title-ambient" aria-hidden="true">
+      <div class="sun-disc"></div>
+      <div class="dune dune-back"></div>
+      <div class="dune dune-mid"></div>
+      <div class="dune dune-front"></div>
+      <div class="wall-silhouette">
+        <span class="tower tower-a"></span>
+        <span class="tower tower-b"></span>
+        <span class="tower tower-c"></span>
+      </div>
+      <div class="caravan-silhouette">· ︵ · ︵ ·</div>
+      <div class="ambient-birds">︵　︵　︵</div>
+    </div>
+
+    <div class="title-topline">
+      <span>虚构治理推演</span>
+      <span class="title-rule"></span>
+      <span>唐 · 天宝元年（742）</span>
+    </div>
+
+    <div class="hero-copy">
+      <div class="eyebrow">A Dunhuang Chronicle · 河西走廊 · 沙州</div>
+      <div class="title-english">Silk Road Seasons</div>
+      <div class="title-lockup">
+        <h1 id="gameTitle">敦煌 <i>·</i><br>四时策</h1>
+        <span class="title-seal" aria-hidden="true">守<br>城</span>
+      </div>
+      <p class="title-subtitle">驼铃穿越大漠，你的一纸政令，将决定这座边城的来年。</p>
+      <p class="title-description">执掌沙州八季，在仓廪、公帑、民心、城防与文教之间作出取舍。没有唯一正确的答案，只有被历史照见的治理。</p>
+
+      <div class="title-actions">
+        <button class="button button-primary button-large" id="startButton" type="button">
+          <span>赴任沙州</span>
+          <span class="button-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="button button-ghost hidden" id="continueButton" type="button">续接旧案</button>
+      </div>
+
+      <div class="title-meta" aria-label="游戏特色">
+        <span><b>八</b> 季一局</span>
+        <span><b>二</b> 策决断</span>
+        <span><b>廿二</b> 则史鉴</span>
+      </div>
+    </div>
+
+    <div class="title-footer">
+      <span>历史制度有据 · 人物情节为虚构</span>
+      <button class="text-button" id="titleAboutButton" type="button">关于本作</button>
+    </div>
+  </section>
+
+  <section class="game-screen hidden" id="gameScreen" aria-label="沙州治城游戏">
+    <header class="topbar">
+      <div class="brand-mini">
+        <button class="mini-seal" id="homeButton" type="button" aria-label="返回封面">敦</button>
+        <div>
+          <strong>敦煌 · 四时策</strong>
+          <span>沙州治城录</span>
+        </div>
+      </div>
+
+      <div class="season-center">
+        <div class="season-kicker" id="yearLabel">天宝元年</div>
+        <div class="season-title"><span id="seasonGlyph">春</span><i></i><span id="seasonName">春 · 启耕</span></div>
+        <div class="season-dots" id="seasonDots" aria-label="八季进度"></div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-button" id="helpButton" type="button" aria-label="玩法说明">?</button>
+        <button class="icon-button" id="soundButton" type="button" aria-label="关闭音效">
+          <span class="sound-on" aria-hidden="true">声</span>
+          <span class="sound-off hidden" aria-hidden="true">静</span>
+        </button>
+        <button class="button button-outline" id="archiveButton" type="button">
+          <span>史鉴</span>
+          <span class="archive-count" id="archiveCount">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="game-layout">
+      <aside class="city-panel" aria-label="城情">
+        <div class="panel-heading">
+          <div>
+            <span class="section-kicker">城情总览</span>
+            <h2>沙州五事</h2>
+          </div>
+          <span class="weather-badge" id="weatherBadge">东南风</span>
+        </div>
+
+        <div class="resource-stack">
+          <div class="resource-row" data-resource="grain">
+            <div class="resource-label">
+              <span class="resource-mark grain-mark">粮</span>
+              <span><b>仓廪</b><small>军民口粮</small></span>
+              <strong class="resource-value" id="grainValue">60</strong>
+            </div>
+            <div class="meter" role="progressbar" aria-label="仓廪" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+              <span class="meter-fill grain-fill" id="grainBar"></span>
+            </div>
+          </div>
+
+          <div class="resource-row" data-resource="coin">
+            <div class="resource-label">
+              <span class="resource-mark coin-mark">钱</span>
+              <span><b>公帑</b><small>官署可用财货</small></span>
+              <strong class="resource-value" id="coinValue">60</strong>
+            </div>
+            <div class="meter" role="progressbar" aria-label="公帑" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+              <span class="meter-fill coin-fill" id="coinBar"></span>
+            </div>
+          </div>
+
+          <div class="resource-row" data-resource="morale">
+            <div class="resource-label">
+              <span class="resource-mark morale-mark">民</span>
+              <span><b>民心</b><small>百姓对州府的信任</small></span>
+              <strong class="resource-value" id="moraleValue">62</strong>
+            </div>
+            <div class="meter" role="progressbar" aria-label="民心" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62">
+              <span class="meter-fill morale-fill" id="moraleBar"></span>
+            </div>
+          </div>
+
+          <div class="resource-row" data-resource="defense">
+            <div class="resource-label">
+              <span class="resource-mark defense-mark">防</span>
+              <span><b>城防</b><small>烽戍、军备与驿路</small></span>
+              <strong class="resource-value" id="defenseValue">55</strong>
+            </div>
+            <div class="meter" role="progressbar" aria-label="城防" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55">
+              <span class="meter-fill defense-fill" id="defenseBar"></span>
+            </div>
+          </div>
+
+          <div class="resource-row" data-resource="culture">
+            <div class="resource-label">
+              <span class="resource-mark culture-mark">文</span>
+              <span><b>文教</b><small>学舍与多元交流</small></span>
+              <strong class="resource-value" id="cultureValue">40</strong>
+            </div>
+            <div class="meter" role="progressbar" aria-label="文教" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40">
+              <span class="meter-fill culture-fill" id="cultureBar"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modifier-block">
+          <div class="modifier-title"><span>治城基业</span><small>影响每季岁计</small></div>
+          <div class="modifier-grid" id="modifierGrid">
+            <span><i class="modifier-dot irrigation-dot"></i>渠堰 <b id="irrigationMod">0</b></span>
+            <span><i class="modifier-dot market-dot"></i>商路 <b id="marketMod">0</b></span>
+            <span><i class="modifier-dot watch-dot"></i>烽戍 <b id="watchMod">0</b></span>
+            <span><i class="modifier-dot school-dot"></i>学舍 <b id="schoolMod">0</b></span>
+          </div>
+        </div>
+
+        <div class="objective-card">
+          <div class="objective-label"><span>本任考成</span><span id="turnStatus">8 季之约</span></div>
+          <p>稳住五项城情，让沙州在丝路上继续繁荣。</p>
+          <div class="objective-line"><span id="objectivePercent">0%</span><span>任期进度</span></div>
+          <div class="objective-track"><span id="objectiveBar"></span></div>
+        </div>
+      </aside>
+
+      <section class="map-panel" aria-labelledby="mapTitle">
+        <div class="map-heading">
+          <div>
+            <span class="section-kicker">沙州城坊图</span>
+            <h2 id="mapTitle">河西咽喉 · 绿洲孤城</h2>
+          </div>
+          <button class="text-button with-arrow" id="mapHintButton" type="button">点选城坊，访古问今 <span>↗</span></button>
+        </div>
+
+        <div class="map-frame" id="mapFrame">
+          <svg class="dunhuang-map" viewBox="0 0 900 500" role="img" aria-labelledby="mapSvgTitle mapSvgDesc">
+            <title id="mapSvgTitle">沙州城坊示意图</title>
+            <desc id="mapSvgDesc">群山、沙丘与河流环抱沙州城，城内标有市署、驿馆、学舍、渠堰和烽燧。</desc>
+            <defs>
+              <linearGradient id="skyWash" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#e8d6aa"/>
+                <stop offset="0.58" stop-color="#d9c091"/>
+                <stop offset="1" stop-color="#c7aa75"/>
+              </linearGradient>
+              <linearGradient id="riverWash" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#8a9e91" stop-opacity=".26"/>
+                <stop offset="1" stop-color="#526b62" stop-opacity=".5"/>
+              </linearGradient>
+              <pattern id="gridPattern" width="46" height="46" patternUnits="userSpaceOnUse">
+                <path d="M 46 0 L 0 0 0 46" fill="none" stroke="#735b39" stroke-opacity=".11" stroke-width="1"/>
+              </pattern>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="160%">
+                <feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#4b391d" flood-opacity=".22"/>
+              </filter>
+              <filter id="inkBlur">
+                <feGaussianBlur stdDeviation="2.2"/>
+              </filter>
+            </defs>
+
+            <rect width="900" height="500" fill="url(#skyWash)"/>
+            <rect width="900" height="500" fill="url(#gridPattern)" opacity=".45"/>
+            <circle cx="732" cy="84" r="49" fill="#b64c34" opacity=".74"/>
+            <path d="M0 276 C96 228 150 250 236 220 C314 192 380 257 454 226 C538 191 605 205 690 176 C766 151 837 181 900 139 L900 500 L0 500Z" fill="#d0b786" opacity=".7"/>
+            <path d="M0 354 C90 318 156 336 238 300 C330 260 391 332 480 296 C580 256 637 292 730 257 C800 230 860 239 900 215 L900 500 L0 500Z" fill="#bca174" opacity=".53"/>
+
+            <g class="mountains" fill="none" stroke="#67563b" stroke-linecap="round">
+              <path d="M22 174 C73 117 108 131 131 175 C149 117 204 100 235 168" stroke-width="3" opacity=".58"/>
+              <path d="M48 178 C92 153 116 155 134 176 M151 153 C181 139 204 147 221 169" stroke-width="1.2" opacity=".33"/>
+              <path d="M721 143 C754 109 783 105 804 136 C822 95 858 89 879 126" stroke-width="2.4" opacity=".45"/>
+              <path d="M742 143 C765 125 787 123 803 138 M820 118 C845 108 863 111 875 124" stroke-width="1.1" opacity=".28"/>
+            </g>
+
+            <g class="desert-lines" fill="none" stroke="#6d5839" stroke-width="1.35" opacity=".27">
+              <path d="M57 320 C130 296 166 315 221 293 C276 270 332 288 373 267"/>
+              <path d="M53 336 C128 310 174 326 227 306 C277 287 322 303 379 279"/>
+              <path d="M549 365 C607 337 653 349 710 332 C768 314 818 324 861 303"/>
+              <path d="M574 386 C635 357 679 366 726 350 C780 332 820 342 864 323"/>
+            </g>
+
+            <path d="M532 -20 C494 78 554 142 520 201 C482 266 527 335 479 395 C448 435 447 470 465 520" fill="none" stroke="url(#riverWash)" stroke-width="29" stroke-linecap="round"/>
+            <path d="M532 -20 C494 78 554 142 520 201 C482 266 527 335 479 395 C448 435 447 470 465 520" fill="none" stroke="#48625c" stroke-width="1.2" opacity=".4"/>
+
+            <g class="silk-road">
+              <path d="M25 441 C120 407 164 379 231 349 C294 321 336 328 392 294 C444 262 480 226 547 211 C620 195 700 189 781 128 C824 96 864 70 898 55" fill="none" stroke="#7b5435" stroke-width="2.2" stroke-dasharray="6 8" opacity=".58"/>
+              <circle cx="119" cy="407" r="4" fill="#8e392d"/>
+              <circle cx="304" cy="331" r="4" fill="#8e392d"/>
+              <circle cx="531" cy="215" r="4" fill="#8e392d"/>
+              <circle cx="768" cy="137" r="4" fill="#8e392d"/>
+            </g>
+
+            <g class="city-island" filter="url(#softShadow)">
+              <path d="M274 211 L605 187 L682 322 L341 365 Z" fill="#6a5231" opacity=".17" transform="translate(0 11)"/>
+              <path d="M274 211 L605 187 L682 322 L341 365 Z" fill="#e7d6af" stroke="#5f4b2e" stroke-width="3"/>
+              <path d="M291 224 L594 202 L659 312 L349 348 Z" fill="none" stroke="#7f6843" stroke-width="1" opacity=".8"/>
+              <path d="M300 244 L575 222 L628 298 L363 329 Z" fill="#c9b184" opacity=".4"/>
+              <path d="M352 211 L393 250 L458 244 M476 205 L518 242 L583 233" fill="none" stroke="#765e3b" stroke-width="2" opacity=".65"/>
+              <path d="M273 212 L235 226 L274 229 M605 187 L654 202 L604 207 M682 322 L668 361 L657 322 M342 365 L374 398 L365 349" fill="#8a6b3e" stroke="#594628" stroke-width="2"/>
+
+              <g fill="#a57846" stroke="#5f482a" stroke-width="1.4">
+                <path d="M332 256 l42 -3 l5 28 l-41 4z"/>
+                <path d="M383 252 l50 -4 l5 30 l-50 4z"/>
+                <path d="M442 247 l43 -3 l4 29 l-42 4z"/>
+                <path d="M494 243 l41 -3 l4 27 l-40 3z"/>
+                <path d="M363 285 l47 -4 l5 30 l-47 4z"/>
+                <path d="M418 280 l58 -4 l5 30 l-58 4z"/>
+                <path d="M484 275 l56 -4 l4 28 l-55 4z"/>
+                <path d="M546 271 l46 -4 l5 28 l-45 3z"/>
+              </g>
+
+              <g fill="#d9c49a" stroke="#6a5433" stroke-width="1.2">
+                <path d="M354 239 l55 -4 l4 22 l-54 4z"/>
+                <path d="M420 233 l67 -5 l4 22 l-66 5z"/>
+                <path d="M500 227 l67 -5 l4 22 l-66 5z"/>
+              </g>
+
+              <g class="city-gates">
+                <path d="M422 351 l31 -2 l1 14 l-32 2z" fill="#4b3c27"/>
+                <path d="M635 311 l24 -2 l8 15 l-25 2z" fill="#4b3c27"/>
+              </g>
+
+              <g class="pagoda" fill="#6c5332">
+                <path d="M465 265 l14 -1 l1 23 l-15 1z"/>
+                <path d="M457 266 l30 -3 l-5 -7 l-19 2z"/>
+                <path d="M458 253 l27 -2 l-5 -7 l-17 2z"/>
+                <path d="M460 241 l22 -2 l-4 -6 l-14 1z"/>
+              </g>
+            </g>
+
+            <g class="beacon" fill="#6b5231">
+              <path d="M776 241 l25 -2 l8 30 l-34 3z"/>
+              <path d="M770 234 l36 -3 l-5 -7 l-26 2z" fill="#8d3f2f"/>
+              <path d="M795 208 C810 190 819 191 828 174 C824 200 814 217 796 224Z" fill="none" stroke="#62513c" stroke-width="2"/>
+              <circle cx="810" cy="192" r="3.5" fill="#a4402e" opacity=".8"/>
+            </g>
+
+            <g class="camel" transform="translate(92 370) scale(.78)" fill="#5d4a32">
+              <path d="M0 16 C8 5 22 3 31 9 C38 -2 49 4 52 14 L56 30 L50 31 L46 19 C39 22 29 20 24 15 L21 32 L15 32 L17 15 L9 20 L3 36 L-2 35Z"/>
+              <path d="M51 15 l12 -2 l7 -9 l4 3 l-6 11 l-14 4z"/>
+              <circle cx="71" cy="5" r="2.5"/>
+              <path d="M27 13 C26 3 31 0 35 12" fill="none" stroke="#5d4a32" stroke-width="3"/>
+            </g>
+
+            <g font-family="KaiTi, STKaiti, serif" fill="#5e4a2d" text-anchor="middle">
+              <text x="456" y="397" font-size="27" letter-spacing="8">沙州城</text>
+              <text x="456" y="422" font-size="13" opacity=".65" letter-spacing="3">丝路要冲 · 绿洲重镇</text>
+            </g>
+
+            <g class="map-compass" transform="translate(826 393)" fill="none" stroke="#655035">
+              <circle r="30" opacity=".25"/>
+              <circle r="20" opacity=".18"/>
+              <path d="M0 -23 L7 3 L0 -1 L-7 3Z" fill="#7c3c2f" stroke="none"/>
+              <path d="M0 23 L6 4 L0 7 L-6 4Z" fill="#5d4d37" stroke="none"/>
+              <text x="0" y="-36" text-anchor="middle" font-family="KaiTi, serif" font-size="14" fill="#5d4d37" stroke="none">北</text>
+            </g>
+          </svg>
+
+          <div class="map-season-seal" aria-hidden="true">
+            <span id="mapSeasonGlyph">春</span>
+            <small>天宝</small>
+          </div>
+
+          <button class="map-spot spot-market" type="button" data-place="market" aria-label="探访市署">
+            <span class="spot-pin">市</span><span class="spot-label">市署</span>
+          </button>
+          <button class="map-spot spot-post" type="button" data-place="post" aria-label="探访驿馆">
+            <span class="spot-pin">驿</span><span class="spot-label">驿馆</span>
+          </button>
+          <button class="map-spot spot-school" type="button" data-place="school" aria-label="探访学舍">
+            <span class="spot-pin">学</span><span class="spot-label">学舍</span>
+          </button>
+          <button class="map-spot spot-canal" type="button" data-place="canal" aria-label="探访渠堰">
+            <span class="spot-pin">渠</span><span class="spot-label">渠堰</span>
+          </button>
+          <button class="map-spot spot-beacon" type="button" data-place="beacon" aria-label="探访烽燧">
+            <span class="spot-pin">烽</span><span class="spot-label">烽燧</span>
+          </button>
+
+          <div class="map-info hidden" id="mapInfo">
+            <button class="map-info-close" id="mapInfoClose" type="button" aria-label="关闭地点介绍">×</button>
+            <span class="map-info-index" id="mapInfoIndex">地志 壹</span>
+            <h3 id="mapInfoTitle">市署</h3>
+            <p id="mapInfoText"></p>
+          </div>
+        </div>
+
+        <div class="dispatch-banner">
+          <div class="dispatch-kicker"><span class="pulse-dot"></span> 今季风闻</div>
+          <p id="rumorText">春雪初融，西来的驼队正在阳关外等候入城。</p>
+          <div class="dispatch-tags" id="seasonTags">
+            <span>春耕加成</span><span>商队将至</span>
+          </div>
+        </div>
+
+        <div class="chronicle-strip">
+          <span class="chronicle-label">治城录</span>
+          <div class="chronicle-feed" id="chronicleFeed">
+            <span>初至沙州。城中百业待兴，八季考成自此始。</span>
+          </div>
+          <button class="text-button" id="viewLogButton" type="button">查看全录</button>
+        </div>
+      </section>
+
+      <aside class="policy-panel" aria-labelledby="policyTitle">
+        <div class="policy-heading">
+          <div>
+            <span class="section-kicker">案牍待批</span>
+            <h2 id="policyTitle">本季政令</h2>
+          </div>
+          <div class="action-points" aria-label="本季剩余政令数">
+            <span class="ap-seal" id="apSeal">贰</span>
+            <small>道政令</small>
+          </div>
+        </div>
+
+        <div class="policy-tip">
+          <span class="ink-swipe" aria-hidden="true"></span>
+          <p id="policyTipText">每季可颁行两道政令。资源效果会随季节变化。</p>
+        </div>
+
+        <div class="policy-grid" id="policyGrid" aria-live="polite"></div>
+
+        <div class="policy-footer">
+          <div class="policy-note">
+            <span>选择政令后，将迎来本季事件。</span>
+            <b id="apHint">尚余 2 道</b>
+          </div>
+          <button class="button button-primary button-block" id="endTurnButton" type="button" disabled>
+            颁行完毕 · 迎候时局
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="game-footer">
+      <span>唐天宝元年 · 沙州</span>
+      <span>本作中的州府人物与具体情节为虚构，制度与史事依据附于史鉴。</span>
+      <span id="saveState">进度自动保存</span>
+    </footer>
+  </section>
+
+  <section class="result-screen hidden" id="resultScreen" aria-labelledby="resultTitle">
+    <div class="result-rays" aria-hidden="true"></div>
+    <div class="result-card">
+      <span class="section-kicker">八季考成 · 史官评语</span>
+      <div class="result-seal" id="resultSeal">良</div>
+      <h1 id="resultTitle">边城良牧</h1>
+      <p class="result-subtitle" id="resultSubtitle">风沙未掩市声，烽烟未惊炊烟。</p>
+
+      <div class="result-score-row">
+        <div class="result-score-main"><span id="resultScore">0</span><small>治城总评</small></div>
+        <div class="result-stats" id="resultStats"></div>
+      </div>
+
+      <div class="result-achievements">
+        <span class="result-section-label">本任功业</span>
+        <div class="achievement-list" id="achievementList"></div>
+      </div>
+
+      <div class="result-lesson">
+        <span class="result-section-label">从沙州读到历史</span>
+        <p id="resultLesson">治理从来不是单项数值的最大化，而是在彼此牵制的现实里寻找可承受的平衡。</p>
+      </div>
+
+      <div class="result-actions">
+        <button class="button button-primary" id="replayButton" type="button">再理一任</button>
+        <button class="button button-outline" id="resultArchiveButton" type="button">回看史鉴</button>
+        <button class="button button-ghost" id="resultHomeButton" type="button">返回封面</button>
+      </div>
+      <div class="result-footer">
+        <span id="archiveResultCount">已收录 0 则史鉴</span>
+        <span>沙州 · 天宝元年至二年</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-layer hidden" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventTitle">
+    <div class="modal-backdrop"></div>
+    <div class="event-modal">
+      <button class="modal-close hidden" id="eventCloseButton" type="button" aria-label="关闭事件">×</button>
+      <div class="event-visual" id="eventVisual">
+        <div class="event-pattern" aria-hidden="true"></div>
+        <span class="event-symbol" id="eventSymbol">驼</span>
+        <span class="event-visual-caption" id="eventVisualCaption">丝路商旅</span>
+      </div>
+      <div class="event-content">
+        <div class="event-meta">
+          <span id="eventSeason">天宝元年 · 春</span>
+          <span id="eventType">边城事件</span>
+        </div>
+        <h2 id="eventTitle">驼铃入城</h2>
+        <p class="event-story" id="eventStory"></p>
+        <div class="event-choices" id="eventChoices"></div>
+
+        <div class="event-result hidden" id="eventResult" aria-live="polite">
+          <div class="result-stamp">决</div>
+          <div>
+            <span class="section-kicker">决断之后</span>
+            <h3 id="eventResultTitle">城门已开</h3>
+            <p id="eventResultText"></p>
+          </div>
+          <div class="event-effects" id="eventEffects"></div>
+          <div class="history-note">
+            <span class="history-note-mark">史鉴</span>
+            <div>
+              <p id="eventHistoryText"></p>
+              <small id="eventSourceText"></small>
+            </div>
+          </div>
+          <div class="season-settlement">
+            <span class="settlement-title">本季岁计</span>
+            <div class="settlement-lines" id="settlementLines"></div>
+          </div>
+          <button class="button button-primary" id="eventContinueButton" type="button">
+            进入下一季 <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-layer hidden" id="archiveModal" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+    <div class="modal-backdrop" data-close="archive"></div>
+    <div class="archive-modal">
+      <header class="archive-header">
+        <div>
+          <span class="section-kicker">沙州舆地 · 制度纪闻</span>
+          <h2 id="archiveTitle">史鉴</h2>
+        </div>
+        <div class="archive-header-right">
+          <span class="archive-progress"><b id="archiveHeaderCount">0</b> / <span id="archiveTotalCount">0</span></span>
+          <button class="icon-button" id="archiveCloseButton" type="button" aria-label="关闭史鉴">×</button>
+        </div>
+      </header>
+      <div class="archive-tabs" role="tablist" aria-label="史鉴分类">
+        <button class="archive-tab active" type="button" role="tab" aria-selected="true" data-archive-tab="all">全部</button>
+        <button class="archive-tab" type="button" role="tab" aria-selected="false" data-archive-tab="place">地志</button>
+        <button class="archive-tab" type="button" role="tab" aria-selected="false" data-archive-tab="system">制度</button>
+        <button class="archive-tab" type="button" role="tab" aria-selected="false" data-archive-tab="event">事件</button>
+      </div>
+      <div class="archive-grid" id="archiveGrid"></div>
+      <p class="archive-footnote">历史内容据公开史料与制度通识整理；游戏数值与人物为叙事化演绎。</p>
+    </div>
+  </div>
+
+  <div class="modal-layer hidden" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal-backdrop" data-close="help"></div>
+    <div class="help-modal">
+      <button class="icon-button help-close" id="helpCloseButton" type="button" aria-label="关闭玩法说明">×</button>
+      <span class="section-kicker">赴任须知</span>
+      <h2 id="helpTitle">八季治城，两策定局</h2>
+      <div class="help-steps">
+        <div class="help-step">
+          <span class="help-number">一</span>
+          <div><b>颁两道政令</b><p>每季从候选政令中选择两道。政令有成本，也会随季节产生不同收益。</p></div>
+        </div>
+        <div class="help-step">
+          <span class="help-number">二</span>
+          <div><b>处理一场时局</b><p>事件中的选择没有标准答案。留意取舍，也留意它照见的真实制度。</p></div>
+        </div>
+        <div class="help-step">
+          <span class="help-number">三</span>
+          <div><b>让五事相互支撑</b><p>商路影响财赋，渠堰影响收成，民心影响税收；任何一项失衡都可能让治理难以为继。</p></div>
+        </div>
+      </div>
+      <div class="help-callout">
+        <span>小提示</span>
+        <p>点选城坊可收录地志。每则史鉴都会计入最终治城评语，但不直接提升游戏数值。</p>
+      </div>
+      <button class="button button-primary button-block" id="helpStartButton" type="button">明白了</button>
+    </div>
+  </div>
+
+  <div class="modal-layer hidden" id="logModal" role="dialog" aria-modal="true" aria-labelledby="logTitle">
+    <div class="modal-backdrop" data-close="log"></div>
+    <div class="log-modal">
+      <header>
+        <div>
+          <span class="section-kicker">八季案牍</span>
+          <h2 id="logTitle">治城全录</h2>
+        </div>
+        <button class="icon-button" id="logCloseButton" type="button" aria-label="关闭治城全录">×</button>
+      </header>
+      <div class="log-list" id="logList"></div>
+    </div>
+  </div>
+
+  <div class="modal-layer hidden" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <div class="modal-backdrop" data-close="about"></div>
+    <div class="help-modal about-modal">
+      <button class="icon-button help-close" id="aboutCloseButton" type="button" aria-label="关闭关于">×</button>
+      <span class="section-kicker">关于本作</span>
+      <h2 id="aboutTitle">让历史成为可玩的取舍</h2>
+      <p>《敦煌 · 四时策》以唐天宝元年（742）的沙州为舞台。你以虚构州府官员的身份，在春、夏、秋、冬之间调配资源、处理边城事务。</p>
+      <p>游戏中的过所、关市、驿传、烽燧与军费等问题，均有唐史制度脉络可循；具体人物、事件经过与数值是为了玩法而作的叙事化演绎，不应作为史实复述。</p>
+      <div class="about-source">
+        <b>史实参考</b>
+        <span>《唐六典》</span><span>《通典》</span><span>《旧唐书》</span><span>《新唐书》</span><span>敦煌文书研究通识</span>
+      </div>
+      <button class="button button-primary button-block" id="aboutConfirmButton" type="button">返回封面</button>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script src="game.js"></script>
+</body>
+</html>
