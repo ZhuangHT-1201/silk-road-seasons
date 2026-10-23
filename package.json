@@ -4,6 +4,14 @@
   "description": "Silk Road Seasons: A Dunhuang Chronicle — a historical strategy game set in Tang-era Dunhuang.",
   "license": "MIT",
   "author": "Huiteng Zhuang",
+  "homepage": "https://zhuanght-1201.github.io/silk-road-seasons/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhuangHT-1201/silk-road-seasons.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ZhuangHT-1201/silk-road-seasons/issues"
+  },
   "keywords": [
     "historical-game",
     "strategy-game",

@@ -11,6 +11,8 @@
   ![No dependencies](https://img.shields.io/badge/runtime-zero_dependencies-9f3d2d.svg)
   ![HTML CSS JavaScript](https://img.shields.io/badge/built_with-HTML_%7C_CSS_%7C_JS-b08a4e.svg)
   ![Responsive](https://img.shields.io/badge/layout-desktop_%2B_mobile-6f5367.svg)
+
+  **[Play in your browser →](https://zhuanght-1201.github.io/silk-road-seasons/)**
 </div>
 
 ![Silk Road Seasons title screen](docs/screenshots/cover.png)
@@ -58,6 +60,10 @@ The city map, seasonal conditions, policy deck, and long-term foundations remain
 Click city landmarks and complete events to unlock concise notes about Tang frontier administration, markets, courier stations, beacon networks, irrigation, and cultural exchange.
 
 ## Quick start
+
+Play the hosted version at **https://zhuanght-1201.github.io/silk-road-seasons/**.
+
+To run the game locally:
 
 ```bash
 git clone https://github.com/ZhuangHT-1201/silk-road-seasons.git
